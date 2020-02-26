@@ -1,0 +1,10 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - docker build -t $REPOSITORY_URI .
+  post_build:
+    commands:
+      - aws ecr get-login --region us-east-2 --no-include-email
+      - docker login -u AWS -p $ECR_KEY https://$REPOSITORY_URI
+      - docker push $REPOSITORY_URI
